@@ -1,0 +1,8 @@
+platform :ios, '7.1'
+
+target "FMDBDemo" do
+
+pod 'FMDB', '~>2.6.2'
+
+end
+
