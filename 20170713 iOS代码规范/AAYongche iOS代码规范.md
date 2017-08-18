@@ -153,6 +153,8 @@ static CGFloat _NSStringPathScale(NSString *string) {
     curLoop++;
 ```
 
+- 例外：CGRectMake()这种函数里，简单的计算如`self.frame.size.width-240*AutoScale)/2`，运算符两侧可以没有空格。但是一般来说，尽量还是要有空格的，特别是里面的算式比较长，或者有二元运算符、函数调用等。当然，这时候最好新建一个变量，算完后，再直接放到CGRectMake()里。
+
 ## 指针符号
 
 指针符号与前面的类型之间有空格，与其后的名称之间没有空格。如：
@@ -364,6 +366,26 @@ static const NSUInteger kAlertTagExitApp = 10;
 
 - 变量尽量以描述性的方式来命名。单个字符的变量命名应该尽量避免，除了在for()循环中。
 
+- 不要使用与iOS SDK中相同的名字，防止混淆出错。
+
+```
+@property (strong, nonatomic) NSString *view;
+```
+
+- 函数及变量命名不要与Objective-C惯用法冲突。如：
+
+```
+// 如正常的函数命名不要用`set`开头，这样看起来就像是个属性
+- (void)setDoSomething
+```
+
+- 有些特殊函数的命名尽量遵从苹果的惯用法。如：
+
+```
+// 初始化函数以init开头
+- (instancetype)initWithCarModel:(CarModel*) {
+```
+
 更多命名规则可参考[苹果官方文档](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html#//apple_ref/doc/uid/10000146-SW1)
 
 # 属性与成员变量
@@ -418,6 +440,7 @@ static const NSUInteger kAlertTagExitApp = 10;
 ```
     [rechargeButton addTarget:self action:@selector(recharge) forControlEvents:UIControlEventTouchUpInside];
 ```
+
 - 尽量给每个触发函数起一个名字，不要多个控件公用一个函数。减少magic number的tag使用，如真的需要使用，则给tag声明个常量，取一个直观的名字。如：
 
 ```
