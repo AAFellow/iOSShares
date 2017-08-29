@@ -1,13 +1,13 @@
 # 开发环境
 
-- 请及时升级到最新的小版本，以享受更多新特性。
 - 大版本升级前，如从Xcode8升级到Xcode9，需要全团队统一意见后再进行升级。
+- 请及时升级到最新的小版本，以享受更多新特性。
 
 # 文件组织
 
-- 工程里的group和文件的物理位置一一对应。不包含内容的的group，应该删除。工程中未使用的无用文件，也应及时删除。
+- 工程里的group和文件的物理位置一一对应。不包含内容的的group应该删除，工程中未使用的无用文件也应及时删除。
 - 子group放在父group内的最上方。
-- 各group和文件，若无业务上的顺序，尽量按照字母顺序排序。
+- 各group和文件，若有业务逻辑的顺序，按照逻辑顺序排放。若无业务上的顺序，尽量按照字母顺序排序。
 
 # 代码组织
 
@@ -22,7 +22,7 @@
 7. 匿名类别
 8. `@implement`
 
-以上各部分内的内容，除了按照业务逻辑排序，尽量按照字母顺序排序。比如`#import`内的所有头文件按照文件名排序，类似可以作排序的还有宏定义、delegate名称等。
+以上各部分内部的内容，除了按照业务逻辑排序，尽量按照字母顺序排序。比如`#import`的所有头文件，最好按照文件名排序（当前文件的.h文件不参与排序，放在最上方）。其它可以作排序的还有宏定义、匿名类别中标明要实现的delegate名称等。
 
 `@implement`中的函数使用`#pragma mark - `进行分块，他们的分块及顺序请多注意。
 
@@ -153,7 +153,7 @@ static CGFloat _NSStringPathScale(NSString *string) {
     curLoop++;
 ```
 
-- 例外：CGRectMake()这种函数里，简单的计算如`self.frame.size.width-240*AutoScale)/2`，运算符两侧可以没有空格。但是一般来说，尽量还是要有空格的，特别是里面的算式比较长，或者有二元运算符、函数调用等。当然，这时候最好新建一个变量，算完后，再直接放到CGRectMake()里。
+- 例外：CGRectMake()这种函数里，简单的计算如`(self.frame.size.width-40*2)/2`，运算符两侧可以没有空格。但是一般来说，尽量还是要有空格的，特别是里面的算式比较长，或者有二元运算符、函数调用等。当然，这时候最好新建一个变量，算完后，再直接放到CGRectMake()里。
 
 ## 指针符号
 
@@ -197,7 +197,7 @@ static CGFloat _NSStringPathScale(NSString *string) {
 
 ```
 
-- 其它一些例子：
+- 一些其它例子：
 
 ```
 @property (attributes) id<Protocol> object;
@@ -214,7 +214,7 @@ static CGFloat _NSStringPathScale(NSString *string) {
 - 原则上，最大连续空行数为1，某些地方如`@interface`、`@implement`的前面可以有两个连续空行，但不要超过两个连续空行。
 - 函数之间有且只有一个空行。在`@interface`或`@protocol`中，同组函数之间可以没有空行。
 - 函数和`@interface`、`@implement`、`@end`、`#pragma mark - `等行之间也有一个空行。
-- 开始一段新的业务代码时，应该使用换行来进行视觉分割以增加代码的可读性。当然，若无必要，也请勿保留多余空行。
+- 在函数中，开始一段新的业务逻辑代码时，应该使用换行来进行视觉分割以增加代码的可读性。当然，若无必要，也请勿保留多余空行。
 - 文件末尾有一个空行。
 
 ## 换行
@@ -251,8 +251,6 @@ static CGFloat _NSStringPathScale(NSString *string) {
 ```
 
 # 括号
-
-括号可以更好地对代码进行分块，你应该多多使用它。
 
 - 函数定义、控制语句的`{`放在行尾，不独占一行。末尾的`}`新开一行，并与对应的语句开头对齐。
 - 连续多个运算，可能产生优先级歧义时，应该用圆括号隔开多个运算。如：
@@ -364,7 +362,7 @@ static const NSUInteger kAlertTagExitApp = 10;
 @property (strong, nonatomic) NSString *descriptiveVariableName;  
 ```
 
-- 变量尽量以描述性的方式来命名。单个字符的变量命名应该尽量避免，除了在for()循环中。
+- 变量尽量以描述性的方式来命名。单个字符的变量命名应该尽量避免，除了除了for()循环语句中的`int i`。
 
 - 不要使用与iOS SDK中相同的名字，防止混淆出错。
 
@@ -392,7 +390,7 @@ static const NSUInteger kAlertTagExitApp = 10;
 
 - 成员变量的命名以下划线`_`开头。
 - 推荐使用属性，而不推荐使用成员变量。
-- 应该使用`.`语法来访问属性，访问其他实例时首选括号。如：
+- 应该使用`.`语法来访问属性，访问实例对象时首选括号。如：
 
 ```
     view.backgroundColor = [UIColor orangeColor];
@@ -476,10 +474,10 @@ static const NSUInteger kAlertTagExitApp = 10;
   ...
 }
 
-[myObj short:arg1
-          longKeyword:arg2
-    evenLongerKeyword:arg3
-                error:arg4];
+    [myObj short:arg1
+                  longKeyword:arg2
+        evenLongLongerKeyword:arg3
+                        error:arg4];
 ```
 
 # 注释
@@ -597,15 +595,15 @@ NSString *const MJRefreshKeyPathContentOffset = @"contentOffset";
 
 推荐
 ```
-NSArray *names = @[@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul"];
-NSDictionary *productManagers = @{@"iPhone" : @"Kate", @"iPad" : @"Kamal", @"Mobile Web" : @"Bill"};
-NSNumber *shouldUseLiterals = @YES;
-NSNumber *buildingZIPCode = @10018;
+    NSArray *names = @[@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul"];
+    NSDictionary *productManagers = @{@"iPhone" : @"Kate", @"iPad" : @"Kamal", @"Mobile Web" : @"Bill"};
+    NSNumber *shouldUseLiterals = @YES;
+    NSNumber *buildingZIPCode = @10018;
 ```
 不推荐
 ```
-NSArray *names = [NSArray arrayWithObjects:@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul", nil];
-NSDictionary *productManagers = [NSDictionary dictionaryWithObjectsAndKeys: @"Kate", @"iPhone", @"Kamal", @"iPad", @"Bill", @"Mobile Web", nil];
-NSNumber *shouldUseLiterals = [NSNumber numberWithBool:YES];
-NSNumber *buildingZIPCode = [NSNumber numberWithInteger:10018];
+    NSArray *names = [NSArray arrayWithObjects:@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul", nil];
+    NSDictionary *productManagers = [NSDictionary dictionaryWithObjectsAndKeys: @"Kate", @"iPhone", @"Kamal", @"iPad", @"Bill", @"Mobile Web", nil];
+    NSNumber *shouldUseLiterals = [NSNumber numberWithBool:YES];
+    NSNumber *buildingZIPCode = [NSNumber numberWithInteger:10018];
 ```
