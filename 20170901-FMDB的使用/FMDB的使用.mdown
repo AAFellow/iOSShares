@@ -1,0 +1,55 @@
+#FMDB的使用：
+##FMDB说白了就是对SQLite数据库的C/C++接口进行了一层封装，
+- 本次讲解的内容大概有一下几个方面：
+- FMDB的使用实例；
+- FMDatabase类
+- FMStatement类
+
+本次主要讲的是FMDatabase类的主要方法有一下：
+- init
+- open
+- close
+- executeUpdate （更新数据库）
+- executeQuery  （查询数据库）
+
+-- executeUpdate 的写作思路：
+1、判断数据库是不是存在；
+2、判断当前数据库是不是在使用；
+3、判断是否有缓存的statement语句
+
+#了解简单的SQLite C/C++ API
+
+准备语句（prepared statement）对象一个代表一个简单SQL语句对象的实例，这个对象通常被称为“准备语句”或者“编译好的SQL语句”或者就直接称为“语句”。
+
+         语句对象的生命周期经历这样的过程：
+
+-- 使用sqlite3_prepare_v2或相关的函数创建这个对象
+
+-- 使用sqlite3_bind_*()给宿主参数（host parameters）绑定值
+
+-- 通过调用sqlite3_step一次或多次来执行这个sql
+
+-- 使用sqlite3——reset()重置这个语句，然后回到第2步，这个过程做0次或多次
+
+-- 使用sqlite3_finalize()销毁这个对象
+
+
+##sqlite3_open (const char *filename,sqlite3**ppDb)
+- - 该例程打开一个指向 SQLite 数据库文件的连接，返回一个用于其他 SQLite 程序的数据库连接对象。如果 filename 参数是 NULL 或 ':memory:'，那么 sqlite3_open() 将会在 RAM 中创建一个内存数据库，这只会在 session 的有效时间内持续。如果文件名 filename 不为 NULL，那么 sqlite3_open() 将使用这个参数值尝试打开数据库文件。如果该名称的文件不存在，sqlite3_open() 将创建一个新的命名为该名称的数据库文件并打开。
+
+## sqlite3_close(sqlite3*)
+- - 该例程关闭之前调用 sqlite3_open() 打开的数据库连接。所有与连接相关的语句都应在连接关闭之前完成。
+如果还有查询没有完成，sqlite3_close() 将返回 SQLITE_BUSY 禁止关闭的错误消息。
+
+## sqlite3_exec(sqlite3*, const char *sql, sqlite_callback, void *data, char **errmsg)
+该例程提供了一个执行 SQL 命令的快捷方式，SQL 命令由 sql 参数提供，可以由多个 SQL 命令组成。
+sqlite3 是打开的数据库对象，
+sqlite_callback 是一个回调，
+data 作为其第一个参数，
+errmsg 将被返回用来获取程序生成的任何错误。
+sqlite3_exec() 程序解析并执行由 sql 参数所给的每个命令，直到字符串结束或者遇到错误为止。
+
+
+
+
+
