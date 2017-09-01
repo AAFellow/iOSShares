@@ -1,0 +1,7 @@
+platform :ios, '7.1'
+
+  target "FMDB的使用" do
+
+  pod 'FMDB','~>2.6.2'
+
+end
